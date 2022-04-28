@@ -1,6 +1,8 @@
 version: 2.1
-
+orbs:
+  continuation: circleci/continuation@0.2.0
 jobs:
+
   terraform_plan:
     docker:
       - image: hashicorp/terraform:latest
@@ -78,4 +80,8 @@ workflows:
       - infracost:
           requires:
             - terraform_plan
-      - terraform_apply
+      - terraform_apply:
+          filters:
+            branches:
+              only:
+                - main
