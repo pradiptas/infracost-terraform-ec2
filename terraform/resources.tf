@@ -2,11 +2,14 @@ provider "aws" {
   region	 = "${var.region}"
 }
 
-backend "s3" {
-   bucket = "prad-terraform-bucket"
-   key    = "terraform/webapp/terraform.tfstate"
-   region = "us-west-2"
+terraform {
+  backend "s3" {
+    bucket = "prad-terraform-bucket"
+    key    = "terraform/webapp/terraform.tfstate"
+    region = "us-west-2"
+  }
 }
+
 
 resource "aws_instance" "ec2-prad-instance" {
   ami           = "${var.instance_ami}"
