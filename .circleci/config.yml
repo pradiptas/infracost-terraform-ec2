@@ -57,6 +57,19 @@ jobs:
             PULL_REQUEST_NUMBER=${CIRCLE_PULL_REQUEST##*/}
             # See the 'Comment options' section in our README below for other options.
             infracost comment github --path infracost.json --repo $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME --pull-request $PULL_REQUEST_NUMBER --github-token $GITHUB_TOKEN
+  terraform_apply:
+    docker:
+      - image: hashicorp/terraform:latest
+    environment:
+      # If your terraform files are in a subdirectory, set TF_ROOT accordingly
+      TF_ROOT: ./terraform # Update this!
+    steps:      
+      - run:
+          name: Run Terraform Apply 
+          command: |
+            cd $TF_ROOT
+            terraform init
+            terraform apply -auto-approve
 
 workflows:
   infracost:
@@ -65,3 +78,4 @@ workflows:
       - infracost:
           requires:
             - terraform_plan
+      - terraform_apply
